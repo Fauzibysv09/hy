@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuous Outline Heart Animation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #001f3f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            cursor: pointer;
+        }
+        .heart {
+            position: absolute;
+            font-size: 30px;  /* mengurangi ukuran font */
+            color: transparent;
+            text-shadow: 0 0 0 red;
+            transition: all 0.8s ease;  /* mempercepat transisi */
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const colors = ['red', 'yellow', 'green', 'cyan', 'magenta', 'orange', 'white', 'pink'];
+        let intervalId;
+
+        document.body.addEventListener('mousedown', function(event) {
+            createHeart(event.clientX, event.clientY);
+            intervalId = setInterval(() => createHeart(event.clientX, event.clientY), 500);  /* meningkatkan interval */
+        });
+
+        document.body.addEventListener('mousemove', function(event) {
+            if (intervalId) {
+                createHeart(event.clientX, event.clientY);
+            }
+        });
+
+        document.body.addEventListener('mouseup', function() {
+            clearInterval(intervalId);
+            intervalId = null;
+        });
+
+        function createHeart(x, y) {
+            const heartElement = document.createElement('div');
+            heartElement.className = 'heart';
+            heartElement.style.left = x - 15 + 'px';  /* sesuaikan posisi agar sesuai dengan ukuran font */
+            heartElement.style.top = y - 15 + 'px';
+            heartElement.textContent = '❤';
+            heartElement.style.textShadow = `0 0 0 ${colors[Math.floor(Math.random() * colors.length)]}`;
+            document.body.appendChild(heartElement);
+            requestAnimationFrame(() => {
+                heartElement.style.transform = 'scale(2)';
+                heartElement.style.opacity = 1;
+            });
+            setTimeout(() => {
+                heartElement.style.transform = 'scale(0.5)';
+                heartElement.style.opacity = 0;
+                setTimeout(() => {
+                    heartElement.remove();
+                }, 800);  /* mempercepat penghapusan */
+            }, 800);
+        }
+    </script>
+</body>
+</html>
